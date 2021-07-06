@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosRequestConfig, AxiosPromise, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // BASE RESPONSE
-import { IResponse, FuncResponsePromise } from '@app/base/base.interface';
+import { FuncResponsePromise } from '@app/base/base.interface';
 
 export interface CustomAxiosPostRequest<T> extends AxiosRequestConfig {
   data?: T;
@@ -13,20 +13,16 @@ export interface CustomAxiosGetRequest<T> extends AxiosRequestConfig {
 }
 
 @Injectable()
-export class AxiosService<T> {
+export class AxiosService {
   private readonly callApi: FuncResponsePromise<
     AxiosRequestConfig,
-    AxiosResponse<IResponse<T>>
+    AxiosResponse
   >;
 
   constructor() {
     this.callApi = (
       requestConfig: AxiosRequestConfig,
-    ): Promise<AxiosResponse<IResponse<T>>> => {
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-
+    ): Promise<AxiosResponse> => {
       const newRequestConfig: AxiosRequestConfig = {
         ...requestConfig,
       };
@@ -35,33 +31,33 @@ export class AxiosService<T> {
     };
   }
 
-  post<L>(
+  post<L, K>(
     requestConfig: CustomAxiosPostRequest<L>,
-  ): Promise<AxiosResponse<IResponse<T>>> {
+  ): Promise<AxiosResponse<K>> {
     return this.callApi({ method: 'POST', ...requestConfig });
   }
 
-  get<L>(
+  get<L, K>(
     requestConfig: CustomAxiosGetRequest<L>,
-  ): Promise<AxiosResponse<IResponse<T>>> {
-    return this.callApi({ method: 'POST', ...requestConfig });
+  ): Promise<AxiosResponse<K>> {
+    return this.callApi({ method: 'GET', ...requestConfig });
   }
 
-  delete<L>(
+  delete<L, K>(
     requestConfig: CustomAxiosGetRequest<L>,
-  ): Promise<AxiosResponse<IResponse<T>>> {
+  ): Promise<AxiosResponse<K>> {
     return this.callApi({ method: 'DELETE', ...requestConfig });
   }
 
-  put<L>(
+  put<L, K>(
     requestConfig: CustomAxiosGetRequest<L>,
-  ): Promise<AxiosResponse<IResponse<T>>> {
+  ): Promise<AxiosResponse<K>> {
     return this.callApi({ method: 'PUT', ...requestConfig });
   }
 
-  patch<L>(
+  patch<L, K>(
     requestConfig: CustomAxiosGetRequest<L>,
-  ): Promise<AxiosResponse<IResponse<T>>> {
+  ): Promise<AxiosResponse<K>> {
     return this.callApi({ method: 'PATCH', ...requestConfig });
   }
 }
