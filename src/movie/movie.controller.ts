@@ -26,12 +26,10 @@ export class MovieController {
     this.movieDBUrl = process.env.THE_MOVIE_API_URL;
 
     this.fullAPI = `${this.movieDBUrl}/3/discover/movie?api_key=${this.movieAPIKEY}`;
-
-    console.log(this.fullAPI);
   }
 
   @Get('/')
-  async employerBumpUp(
+  async videos(
     @Query() movieDTO: GetMoviesDTO,
   ): Promise<PaginationResponse<MovieEntity>> {
     const responseFromMovieDB = await this.axiosService.get<
